@@ -1,0 +1,8 @@
+{
+  "app": {
+    "name": "Requester Language",
+    "short_description": "See and change the requester’s language directly from the ticket page",
+    "long_description": "This app allows your agents to see and change the requester’s language directly from the ticket page.\n\nThe app can save your agents clicks and time if you, for example, have translated macros with dynamic content or rely on the requester’s language for other workflows.",
+    "installation_instructions": "* Login to your Zendesk Support account. \n* Click the cog icon in the sidebar, then select Apps > Marketplace. Search for the \"Requester Language\" app and click on it. \n* Click Install. The app is now ready for use when viewing a ticket."
+  }
+}

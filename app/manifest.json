@@ -1,0 +1,17 @@
+{
+  "name": "Requester Language",
+  "author": {
+    "name": "Jens Herlevsen",
+    "email": "jh@cloudhuset.dk",
+    "url": "https://cloudhuset.dk"
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "ticket_sidebar": "assets/index.html"
+    }
+  },
+  "version": "1.0",
+  "frameworkVersion": "2.0"
+}
