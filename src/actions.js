@@ -14,17 +14,29 @@ export const actions = {
     RESET_STORE: 'RESET_STORE',
 }
 
-export const getRequester = () => dispatch => {
+export const getRequester = (id) => dispatch => {
     dispatch({
         type: actions.GET_REQUESTER,
     })
 
-    return ZAFClient.get('ticket.requester').then(function(data) {
-        const requester = data['ticket.requester']
+    var promise
 
+    if (id) {
+        promise = ZAFClient.request({
+            url: '/api/v2/users/' + id + '.json'
+        }).then(data => {
+            return data.user
+        })
+    } else {
+        promise = ZAFClient.get('ticket.requester').then(data => {
+            return data['ticket.requester']
+        })
+    }
+
+    return promise.then(function(requester) {
         return dispatch({
             type: actions.GET_REQUESTER_SUCCESS,
-            requester,
+            requester: requester ? requester : null,
         })
     }).catch(() => {
         return dispatch({

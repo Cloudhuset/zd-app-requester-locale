@@ -1,7 +1,7 @@
 import React from "react";
-import { render } from 'react-dom';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import zafClient from '../misc/ZAFClient'
 
 import {
     getRequester,
@@ -33,20 +33,30 @@ export default class Main extends React.Component {
         super(props)
 
         props.resetStore()
-        props.getRequester().then(() => {
-            return props.getLocales();
-        }).then(() => {
+        Promise.all([
+            props.getRequester(),
+            props.getLocales()
+        ]).then(() => {
             setTimeout(() => {
                 const height = document.getElementById('app').clientHeight;
                 setAppHeight(height);
             }, 100);
+        })
+
+        zafClient.on('ticket.requester.id.changed', id => {
+            props.getRequester(id).then(() => {
+                setTimeout(() => {
+                    const height = document.getElementById('app').clientHeight;
+                    setAppHeight(height);
+                }, 100);
+            })
         })
     }
 
     render() {
         const { requester, locales, isLoading, isSettingLocale } = this.props
 
-        if(isLoading || locales === null || requester === null) {
+        if (isLoading || !locales) {
             return (
                 <div>
                     Loading, please wait...
@@ -54,19 +64,27 @@ export default class Main extends React.Component {
             )
         }
 
-        const imgStyle = {verticalAlign: 'middle'};
+        if (!requester) {
+            return (
+                <div style={{paddingTop: '10px', textAlign: 'center'}}>
+                    Please add a requester to the ticket
+                    <Footer />
+                </div>
+            )
+        }
+
+        const localeArr = locales.filter(loc => loc.locale === requester.locale)
+
         return <div style={{overflow: 'hidden'}}>
             <select
                 onChange={this.handleLanguageChange.bind(this)}
-                defaultValue={locales.filter(loc => loc.locale === requester.locale)[0].id}
+                value={(requester && localeArr.length === 1) && localeArr[0].id}
                 style={{width: '100%', height: '30px', marginTop: '10px'}}
             >
                 {locales.map(locale => {
-                    return (
-                        <option key={locale.id} value={locale.id}>
-                            {locale.name}
-                        </option>
-                    )
+                    return <option key={locale.id} value={locale.id}>
+                        {locale.name}
+                    </option>
                 })}
             </select>
             {isSettingLocale &&
@@ -75,16 +93,22 @@ export default class Main extends React.Component {
                     <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle>
                 </svg>
             </div>}
-            <footer>
-                <a target="_blank" href="https://www.cloudhuset.dk">Made with <img src="heart-icon.png" style={{verticalAlign: 'middle', width: '16px'}} /> and <img src="coffee-icon.png" style={{verticalAlign: 'middle', width: '16px'}} /> by Cloudhuset</a>
-            </footer>
+            <Footer />
         </div>
     }
 
     handleLanguageChange(e) {
         const { setRequesterLocale, requester } = this.props;
-
+        
         const value = e.target.value;
-        setRequesterLocale(requester.id, value);
+        setRequesterLocale(requester.id, value).then(() => {
+            this.props.getRequester(requester.id)
+        });
     }
 }
+
+const Footer = () => (
+    <footer>
+        <a target="_blank" href="https://www.cloudhuset.dk">Made with <img src="heart-icon.png" style={{verticalAlign: 'middle', width: '16px'}} /> and <img src="coffee-icon.png" style={{verticalAlign: 'middle', width: '16px'}} /> by Cloudhuset</a>
+    </footer>
+)
