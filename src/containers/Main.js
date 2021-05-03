@@ -76,9 +76,17 @@ const Main = props => {
 
   const handleLanguageChange = e => {
     const value = e.target.value;
+    const old_locale = requester.locale
+    const new_locale = locales.find(it => it.id == value).locale
+    
     setRequesterLocale(requester.id, value).then(() => {
       getRequester(requester.id)
     });
+
+    window.gtag('event', 'change_requester_locale', {
+      old_locale,
+      new_locale,
+    })
   }
 
   if (isLoading || !locales) {
