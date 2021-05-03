@@ -1,5 +1,5 @@
 import React from "react";
-import { connect, useCo } from 'react-redux'
+import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import zafClient from '../misc/ZAFClient'
 
