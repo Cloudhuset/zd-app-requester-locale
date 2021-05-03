@@ -15,6 +15,45 @@ const Main = props => {
   const { requester, locales, isLoading, isSettingLocale, setRequesterLocale } = props
 
   React.useEffect(() => {
+    zafClient.get(['ticket', 'currentUser', 'currentAccount']).then(function (data) {
+      const {
+        currentUser: {
+          id: user_id,
+          locale: user_locale,
+        },
+        currentAccount: {
+          subdomain: zendesk_domain,
+          planName: subscription_plan
+        }
+      } = data
+    
+      window.gtag('config', 'G-BNK08B4B6S', { user_id, cookie_flags: 'SameSite=None;Secure', send_page_view: false })
+      window.gtag('set', 'user_properties', { zendesk_domain, subscription_plan, user_locale })
+      
+      const isNewTicket = data.ticket.isNew
+      if (isNewTicket) return
+    
+      const {
+        ticket: {
+          id: ticket_id,
+          type,
+          priority,
+          status,
+          via: { channel },
+          createdAt: ticket_created_at,
+          requester: { locale: requester_locale },
+          brand: {
+            hasHelpCenter: brand_has_help_center,
+            name: brand_name,
+            subdomain: brand_subdomain,
+          }
+        }
+      } = data
+      const eventData = { ticket_id, type, priority, status, channel, created_at: new Date(ticket_created_at), requester_locale, brand_name, brand_subdomain, brand_has_help_center }
+      
+      window.gtag('event', 'view_ticket', eventData)
+    })
+
     Promise.all([
       props.getRequester(),
       props.getLocales()
