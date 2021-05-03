@@ -10,16 +10,14 @@ import Main from './containers/Main'
 const isProduction = process.env.NODE_ENV === 'production';
 
 const store = createStore(reducer,
-    compose(
-        applyMiddleware(
-            thunk,
-        ),
-        window.devToolsExtension && !isProduction ? window.devToolsExtension() : f => f,
-    )
+  compose(
+    applyMiddleware(thunk),
+    window.devToolsExtension && !isProduction ? window.devToolsExtension() : f => f,
+  )
 )
 
 render((
-    <Provider store={store}>
-        <Main/>
-    </Provider>
+  <Provider store={store}>
+    <Main />
+  </Provider>
 ), document.getElementById('app'));
