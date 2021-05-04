@@ -12,7 +12,14 @@ import {
 } from '../actions'
 
 const Main = props => {
-  const { requester, locales, isLoading, isSettingLocale, setRequesterLocale } = props
+  const {
+    requester,
+    locales,
+    isLoading,
+    isSettingLocale,
+    setRequesterLocale,
+    getRequester
+  } = props
 
   React.useEffect(() => {
     zafClient.get(['ticket', 'currentUser', 'currentAccount']).then(function (data) {
@@ -103,6 +110,8 @@ const Main = props => {
   }
 
   const localeArr = locales.filter(loc => loc.locale === requester.locale)
+  console.log(localeArr)
+  console.log(requester)
 
   return <div style={{ overflow: 'hidden' }}>
     <select
