@@ -110,8 +110,6 @@ const Main = props => {
   }
 
   const localeArr = locales.filter(loc => loc.locale === requester.locale)
-  console.log(localeArr)
-  console.log(requester)
 
   return <div style={{ overflow: 'hidden' }}>
     <select
