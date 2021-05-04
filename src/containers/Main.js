@@ -117,7 +117,6 @@ const Main = props => {
     <select
       onChange={handleLanguageChange}
       value={(requester && localeArr.length === 1) && localeArr[0].id}
-      style={{ width: '100%', height: '30px', marginTop: '10px' }}
     >
       {locales.map(locale => {
         return <option key={locale.id} value={locale.id}>
@@ -126,7 +125,7 @@ const Main = props => {
       })}
     </select>
     {isSettingLocale &&
-      <div style={{ width: '25px', height: '25px', position: 'absolute', bottom: 0, right: 0 }}>
+      <div style={{ width: '25px', height: '25px', position: 'absolute', top: '5px', right: '20px' }}>
         <svg className="spinner" viewBox="0 0 50 50">
           <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle>
         </svg>
@@ -155,6 +154,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Main)
 
 const Footer = () => (
   <footer>
-    <a target="_blank" href="https://www.cloudhuset.dk">Made with <img src="heart-icon.png" style={{ verticalAlign: 'middle', width: '16px' }} /> and <img src="coffee-icon.png" style={{ verticalAlign: 'middle', width: '16px' }} /> by Cloudhuset</a>
+    <a target="_blank" href="https://www.cloudhuset.dk">Made by Cloudhuset</a>
   </footer>
 )
