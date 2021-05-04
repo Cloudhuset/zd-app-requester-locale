@@ -1,5 +1,5 @@
 const path = require('path');
-const webpack = require('webpack');
+const TeserPlugin = require('terser-webpack-plugin')
 const dir_js = path.resolve(__dirname, 'src');
 const dir_build = path.resolve(__dirname, 'app/assets');
 
@@ -8,31 +8,24 @@ const isProductionBuild = environment === 'prod'
 
 const plugins = []
 
-plugins.push(new webpack.DefinePlugin({
-  'process.env': {
-    'NODE_ENV': isProductionBuild ? JSON.stringify('production') : JSON.stringify('dev')
-  }
-}))
-
-if (isProductionBuild) {
-  plugins.push(new webpack.optimize.UglifyJsPlugin())
-}
-
 module.exports = {
+  mode: isProductionBuild ? 'production' : 'development',
   entry: path.resolve(dir_js, 'app.js'),
   output: {
     path: dir_build,
     filename: 'bundle.js'
   },
+  optimization: isProductionBuild ? {
+    minimize: true,
+    minimizer: [
+      new TeserPlugin({extractComments: false})
+    ]
+  } : {},
   module: {
-    loaders: [
+    rules: [
       {
-        loader: 'babel-loader',
-        test: dir_js,
-        query: {
-          plugins: ['transform-decorators-legacy', 'transform-object-rest-spread'],
-          presets: ['es2015', 'react'],
-        },
+        test: /\.(js|jsx)$/,
+        loader: 'babel-loader'
       }
     ]
   },
