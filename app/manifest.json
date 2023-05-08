@@ -1,8 +1,9 @@
 {
   "name": "Requester Language",
+  "version": "1.3",
   "author": {
     "name": "Cloudhuset",
-    "email": "info@cloudhuset.dk",
+    "email": "appsupport@cloudhuset.dk",
     "url": "https://www.cloudhuset.dk"
   },
   "defaultLocale": "en",
@@ -13,6 +14,5 @@
       "new_ticket_sidebar": "assets/index.html"
     }
   },
-  "version": "1.2",
   "frameworkVersion": "2.0"
 }
